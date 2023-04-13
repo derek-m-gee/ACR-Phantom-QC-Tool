@@ -146,9 +146,9 @@ def get_LP(img,coord,width=1):
 if __name__ == '__main__':
     id=0
     # data_path = r"C:\Users\derek\Documents\RAMD5394IndependentStudy\ACRQCtool\ADULT_ABD_10\\"
-    # data_path = r"C:\Users\derek\Documents\RAMD5394IndependentStudy\ACRQCtool\ADULT_ABD_12\\"
+    data_path = r"C:\Users\derek\Documents\RAMD5394IndependentStudy\ACRQCtool\ADULT_ABD_12\\"
     # data_path = r"C:\Users\derek\Documents\RAMD5394IndependentStudy\ACRQCtool\80_kVp_3_mm_4\\"
-    data_path = r"C:\Users\derek\Documents\RAMD5394IndependentStudy\ACRQCtool\PED_BODY_6\\"
+    # data_path = r"C:\Users\derek\Documents\RAMD5394IndependentStudy\ACRQCtool\PED_BODY_6\\"
 
     output_path = working_path = r"C:\Users\derek\Documents\RAMD5394IndependentStudy\Test_Project\\"
     patient = load_scan(data_path)
@@ -260,237 +260,237 @@ if __name__ == '__main__':
     insert_ctrs = []
     d_x = 44.25
     d_y = 43.75
-#     contour_list.append(add_ROI(module_1,d_x,d_y,pixel_size))
-#     insert_ctrs.append(len(contour_list) - 1)
-#     contour_list.append(add_ROI(module_1,d_x, -d_y,pixel_size))
-#     insert_ctrs.append(len(contour_list) - 1)
-#     contour_list.append(add_ROI(module_1,-d_x, d_y,pixel_size))
-#     insert_ctrs.append(len(contour_list) - 1)
-#     contour_list.append(add_ROI(module_1,-d_x, -d_y,pixel_size))
-#     insert_ctrs.append(len(contour_list) - 1)
-#     contour_list.append(add_ROI(module_1,-60, 0, pixel_size))
-#     insert_ctrs.append(len(contour_list) - 1)
-#
-#     # contours, hierarchy = cv.findContours(edges, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-#     # #sorts contours by determining if they are an insert
-#     # # contours fused to determine centroid of phantom
-#     # contour_list = list(contours)
-#     # insert_ctrs = []
-#     # fused_contour_pts = []
-#     # for i in np.arange(len(contours)):
-#     #     if (contours[i].size > 100) and (contours[i].size < 250):
-#     #         insert_ctrs.append(i)
-#     #     elif contours[i].size >250:
-#     #         fused_contour_pts += [pt[0] for pt in contours[i]]
-#     # fused_contour = np.array(fused_contour_pts).reshape((-1,1,2)).astype(np.int32)
-#     #
-#     # pixel_size = ds.PixelSpacing
-#     # while len(insert_ctrs) < 4:
-#     #     for i in np.arange(len(insert_ctrs)):
-#     #         ROIx = []
-#     #         ROIy = []
-#     #         flat_list = np.ndarray.flatten(contours[insert_ctrs[i]])
-#     #         #iterates over every x-coordinate in the flattened list of ordered pairs
-#     #         for x in range(0,len(flat_list),2):
-#     #             #If x-coordinate is left of the center, copy right
-#     #             #If x-coordinate is right of the center, copy left
-#     #             if flat_list[x]<cx_phantom:
-#     #                 ROIx.append(int(flat_list[x]+87/pixel_size[1]))
-#     #                 ROIy.append(flat_list[x+1])
-#     #             elif flat_list[x]>cx_phantom:
-#     #                 ROIx.append(int(flat_list[x]-87/pixel_size[1]))
-#     #                 ROIy.append(flat_list[x + 1])
-#     #             # elif flat_list[x+1]<cy_phantom:
-#     #             #     ROIy.append(int(flat_list[x+1]+87/pixel_size[0]))
-#     #             # else:
-#     #             #     ROIy.append(int(flat_list[x+1]-87/pixel_size[0]))
-#     #         new_ROI = list(zip(ROIx,ROIy))
-#     #         contour_list.append(np.array(new_ROI))
-#     #         insert_ctrs.append(len(contour_list)-1)
-#     #         if len(insert_ctrs) == 4:
-#     #             mask = np.zeros(module_1.shape,np.uint8)
-#     #             center = (int(height/2),int(width/2-50/pixel_size[1]))
-#     #             radius = int(80*pixel_size[0])
-#     #             cv.circle(mask,center,radius,255,3)
-#     #             indices = np.transpose(np.nonzero(mask))
-#     #             contour_list.append(np.array(indices))
-#     #             insert_ctrs.append(len(contour_list) - 1)
-# #-100/pixel_size[1]
-#     #Draws the insert ROIs
-#     # drawing_img = np.zeros_like(edges)
-#     # for i in insert_ctrs:
-#     #     cv.drawContours(drawing_img, contour_list, i, 255, 3)
-#     # plt.imshow(drawing_img, cmap='gray')
-#     # plt.show()
-#
-#     #Draw Original ROIs on phantom
-#     # for i in insert_ctrs:
-#     #     cv.drawContours(module_1, contour_list, i, 255, 3)
-#     # plt.imshow(module_1, cmap='gray')
-#     # plt.show()
-#
-#     #should make an insert class and instantiate objects
-#     bone = []
-#     air = []
-#     acrylic = []
-#     polyethylene = []
-#     water = []
-#     unknown = []
-#     module_1_Dislplay = window_image(module_1.copy(),0,400)
-#     for i in insert_ctrs:
-#         mask = np.zeros(module_1.shape,np.uint8)
-#         cv.drawContours(mask,contour_list,i,255,-1)
-#         # area = pixel_size[0]*pixel_size[1]*np.count_nonzero(mask)
-#         # #Iteratively reduce ROI area to match ACR guidelines for ~200 mm2 ROI
-#         # #These bounds allow for up to +/-2.5% ROI area
-#         # while area > 210 or area < 190:
-#         #     if area < 190:
-#         #         kernel = np.ones((3, 3), np.uint8)
-#         #         mask = cv.dilate(mask, kernel, iterations=1)
-#         #         area = pixel_size[0]*pixel_size[1]*np.count_nonzero(mask)
-#         #     else:
-#         #         kernel = np.ones((3, 3), np.uint8)
-#         #         mask = cv.erode(mask, kernel, iterations=5)
-#         #         area = pixel_size[0]*pixel_size[1]*np.count_nonzero(mask)
-#
-#         ROI_val = cv.mean(module_1,mask)[0]
-#         if ROI_val >= 750: #bone
-#             bone.append(ROI_val)
-#             if ROI_val > 850 and ROI_val < 970:
-#                 bone.append(1)
-#             else:
-#                 bone.append(0)
-#         elif ROI_val <= -750: #air
-#             air.append(ROI_val)
-#             if ROI_val > -1005 and ROI_val < -970:
-#                 air.append(1)
-#             else:
-#                 air.append(0)
-#         elif ROI_val > 50 and ROI_val < 300: #acrylic
-#             acrylic.append(ROI_val)
-#             if ROI_val > 110 and ROI_val < 135:
-#                 acrylic.append(1)
-#             else:
-#                 acrylic.append(0)
-#         elif ROI_val > -300 and ROI_val < -50: #polyethylene
-#             polyethylene.append(ROI_val)
-#             if ROI_val > -107 and ROI_val < -84:
-#                 polyethylene.append(1)
-#             else:
-#                 polyethylene.append(0)
-#         elif ROI_val > -50 and ROI_val < 50: #water
-#             water.append(ROI_val)
-#             if ROI_val > -7 and ROI_val < 7:
-#                 water.append(1)
-#             else:
-#                 water.append(0)
-#         else: #error, check ROI positioning/scan protocol
-#             print("ROI Tool failed to detect material")
-#             print(ROI_val)
-#             unknown.append(ROI_val)
-#
-#         contours, hierarchy = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-#         cv.drawContours(module_1_Dislplay, contours, -1, 255, 3)
-#     cv.circle(module_1_Dislplay,(cx_phantom,cy_phantom),3,255,-1)
-#     plt.imshow(module_1_Dislplay, cmap='gray')
-#     plt.show()
-#
-#     contour_list = []
-#     insert_ctrs = []
-#     contour_list.append(add_ROI(module_2,0,58,pixel_size,100))
-#     insert_ctrs.append(len(contour_list) - 1)
-#     contour_list.append(add_ROI(module_2,-22, 58,pixel_size,100))
-#     insert_ctrs.append(len(contour_list) - 1)
-#
-#     module_2_index = int((module_3_pos - 40)/patient[0].SliceThickness)
-#     scan_type = 'adult'
-#     max_CNR = 0
-#     j = 1
-#     plt.figure()
-#     for test_slice in np.arange(module_2_index-5,module_2_index+7,1):
-#         module_2 = window_image(img_stack[test_slice],100,100)
-#         ROI_val = []
-#         module_2_Dislplay = module_2.copy()
-#         for i in insert_ctrs:
-#             mask = np.zeros(module_2.shape,np.uint8)
-#             cv.drawContours(mask,contour_list,i,255,-1)
-#             mean, std_dev = cv.meanStdDev(module_2,mask=mask)
-#             ROI_val.append([mean.item(),std_dev.item()])
-#             contours, hierarchy = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-#             cv.drawContours(module_2_Dislplay, contours, -1, 255, 3)
-#         plt.subplot(2,6, j)
-#         plt.imshow(module_2_Dislplay, cmap='gray')
-#         plt.title('Slice: {}'.format(test_slice))
-#         plt.axis('off')
-#         j=j+1
-#         CNR = abs(ROI_val[0][0]-ROI_val[1][0])/ROI_val[1][1]
-#         if CNR > max_CNR:
-#             max_CNR = CNR
-#             module_2_index = test_slice
-#             module_2_CNR_disp = module_2_Dislplay.copy()
-#     plt.show()
-#
-#     if max_CNR > 1 and scan_type == 'adult':
-#         test_pass = 'PASS'
-#     elif max_CNR > 0.4 and scan_type == "ped_abd":
-#         test_pass = 'PASS'
-#     elif max_CNR > 0.7 and scan_type == 'ped_head':
-#         test_pass = 'PASS'
-#     else:
-#         test_pass = 'FAIL'
-#
-#     plt.imshow(module_2_CNR_disp, cmap='gray')
-#     plt.title('Slice: {}  CNR:{}  {}'.format(module_2_index,round(max_CNR,4),test_pass))
-#     plt.axis('off')
-#     plt.show()
-#
-#     contour_list = []
-#     insert_ctrs = []
-#     contour_list.append(add_ROI(module_3,0,0,pixel_size,400))
-#     insert_ctrs.append(len(contour_list) - 1)
-#     contour_list.append(add_ROI(module_3,0,68,pixel_size,400))
-#     insert_ctrs.append(len(contour_list) - 1)
-#     contour_list.append(add_ROI(module_3,0, -68,pixel_size,400))
-#     insert_ctrs.append(len(contour_list) - 1)
-#     contour_list.append(add_ROI(module_3,68,0,pixel_size,400))
-#     insert_ctrs.append(len(contour_list) - 1)
-#     contour_list.append(add_ROI(module_3,-68,0,pixel_size,400))
-#     insert_ctrs.append(len(contour_list) - 1)
-#
-#     ROI_val = []
-#     module_3_Dislplay = module_3.copy()
-#     module_3_Dislplay = window_image(module_3_Dislplay,0,100)
-#     for i in insert_ctrs:
-#         mask = np.zeros(module_3.shape, np.uint8)
-#         cv.drawContours(mask, contour_list, i, 255, -1)
-#         mean, std_dev = cv.meanStdDev(module_3, mask=mask)
-#         ROI_val.append([mean.item(), std_dev.item()])
-#         contours, hierarchy = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-#         cv.drawContours(module_3_Dislplay, contours, -1, 255, 3)
-#     center = ROI_val[0]
-#     diff = []
-#     test_uniformity = []
-#     for pos in np.arange(1,len(ROI_val)):
-#         diff.append(ROI_val[pos][0] - ROI_val[0][0])
-#         if diff[len(diff)-1] > 7 or diff[len(diff)-1] < -7:
-#             test_uniformity.append('FAIL')
-#         elif diff[len(diff)-1] > 5 or diff[len(diff)-1] < -5:
-#             test_uniformity.append('MINOR DEFICIENCY')
-#         else:
-#             test_uniformity.append('PASS')
-#
-#     plt.imshow(module_3_Dislplay, cmap='gray')
-#     plt.title('12: {}  3: {}  6: {}  9: {}'
-#               '\n Center:{}'
-#               '\nDifference from Center {} {} {} {}'
-#               '\nUniformity within +/- 7 {} {} {} {}'.format(round(ROI_val[1][0],3),round(ROI_val[3][0],3),round(ROI_val[2][0],3),
-#                                                   round(ROI_val[4][0],3),round(ROI_val[0][0],3),round(diff[0],2),round(diff[2],2),round(diff[1],2),round(diff[3],2),
-#                                                                      test_uniformity[0], test_uniformity[2],test_uniformity[1],test_uniformity[3]))
-#     plt.axis('off')
-#     plt.show()
-#
-#     ###
-#
+    contour_list.append(add_ROI(module_1,d_x,d_y,pixel_size))
+    insert_ctrs.append(len(contour_list) - 1)
+    contour_list.append(add_ROI(module_1,d_x, -d_y,pixel_size))
+    insert_ctrs.append(len(contour_list) - 1)
+    contour_list.append(add_ROI(module_1,-d_x, d_y,pixel_size))
+    insert_ctrs.append(len(contour_list) - 1)
+    contour_list.append(add_ROI(module_1,-d_x, -d_y,pixel_size))
+    insert_ctrs.append(len(contour_list) - 1)
+    contour_list.append(add_ROI(module_1,-60, 0, pixel_size))
+    insert_ctrs.append(len(contour_list) - 1)
+
+    # contours, hierarchy = cv.findContours(edges, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+    # #sorts contours by determining if they are an insert
+    # # contours fused to determine centroid of phantom
+    # contour_list = list(contours)
+    # insert_ctrs = []
+    # fused_contour_pts = []
+    # for i in np.arange(len(contours)):
+    #     if (contours[i].size > 100) and (contours[i].size < 250):
+    #         insert_ctrs.append(i)
+    #     elif contours[i].size >250:
+    #         fused_contour_pts += [pt[0] for pt in contours[i]]
+    # fused_contour = np.array(fused_contour_pts).reshape((-1,1,2)).astype(np.int32)
+    #
+    # pixel_size = ds.PixelSpacing
+    # while len(insert_ctrs) < 4:
+    #     for i in np.arange(len(insert_ctrs)):
+    #         ROIx = []
+    #         ROIy = []
+    #         flat_list = np.ndarray.flatten(contours[insert_ctrs[i]])
+    #         #iterates over every x-coordinate in the flattened list of ordered pairs
+    #         for x in range(0,len(flat_list),2):
+    #             #If x-coordinate is left of the center, copy right
+    #             #If x-coordinate is right of the center, copy left
+    #             if flat_list[x]<cx_phantom:
+    #                 ROIx.append(int(flat_list[x]+87/pixel_size[1]))
+    #                 ROIy.append(flat_list[x+1])
+    #             elif flat_list[x]>cx_phantom:
+    #                 ROIx.append(int(flat_list[x]-87/pixel_size[1]))
+    #                 ROIy.append(flat_list[x + 1])
+    #             # elif flat_list[x+1]<cy_phantom:
+    #             #     ROIy.append(int(flat_list[x+1]+87/pixel_size[0]))
+    #             # else:
+    #             #     ROIy.append(int(flat_list[x+1]-87/pixel_size[0]))
+    #         new_ROI = list(zip(ROIx,ROIy))
+    #         contour_list.append(np.array(new_ROI))
+    #         insert_ctrs.append(len(contour_list)-1)
+    #         if len(insert_ctrs) == 4:
+    #             mask = np.zeros(module_1.shape,np.uint8)
+    #             center = (int(height/2),int(width/2-50/pixel_size[1]))
+    #             radius = int(80*pixel_size[0])
+    #             cv.circle(mask,center,radius,255,3)
+    #             indices = np.transpose(np.nonzero(mask))
+    #             contour_list.append(np.array(indices))
+    #             insert_ctrs.append(len(contour_list) - 1)
+#-100/pixel_size[1]
+    #Draws the insert ROIs
+    # drawing_img = np.zeros_like(edges)
+    # for i in insert_ctrs:
+    #     cv.drawContours(drawing_img, contour_list, i, 255, 3)
+    # plt.imshow(drawing_img, cmap='gray')
+    # plt.show()
+
+    #Draw Original ROIs on phantom
+    # for i in insert_ctrs:
+    #     cv.drawContours(module_1, contour_list, i, 255, 3)
+    # plt.imshow(module_1, cmap='gray')
+    # plt.show()
+
+    #should make an insert class and instantiate objects
+    bone = []
+    air = []
+    acrylic = []
+    polyethylene = []
+    water = []
+    unknown = []
+    module_1_Dislplay = window_image(module_1.copy(),0,400)
+    for i in insert_ctrs:
+        mask = np.zeros(module_1.shape,np.uint8)
+        cv.drawContours(mask,contour_list,i,255,-1)
+        # area = pixel_size[0]*pixel_size[1]*np.count_nonzero(mask)
+        # #Iteratively reduce ROI area to match ACR guidelines for ~200 mm2 ROI
+        # #These bounds allow for up to +/-2.5% ROI area
+        # while area > 210 or area < 190:
+        #     if area < 190:
+        #         kernel = np.ones((3, 3), np.uint8)
+        #         mask = cv.dilate(mask, kernel, iterations=1)
+        #         area = pixel_size[0]*pixel_size[1]*np.count_nonzero(mask)
+        #     else:
+        #         kernel = np.ones((3, 3), np.uint8)
+        #         mask = cv.erode(mask, kernel, iterations=5)
+        #         area = pixel_size[0]*pixel_size[1]*np.count_nonzero(mask)
+
+        ROI_val = cv.mean(module_1,mask)[0]
+        if ROI_val >= 750: #bone
+            bone.append(ROI_val)
+            if ROI_val > 850 and ROI_val < 970:
+                bone.append(1)
+            else:
+                bone.append(0)
+        elif ROI_val <= -750: #air
+            air.append(ROI_val)
+            if ROI_val > -1005 and ROI_val < -970:
+                air.append(1)
+            else:
+                air.append(0)
+        elif ROI_val > 50 and ROI_val < 300: #acrylic
+            acrylic.append(ROI_val)
+            if ROI_val > 110 and ROI_val < 135:
+                acrylic.append(1)
+            else:
+                acrylic.append(0)
+        elif ROI_val > -300 and ROI_val < -50: #polyethylene
+            polyethylene.append(ROI_val)
+            if ROI_val > -107 and ROI_val < -84:
+                polyethylene.append(1)
+            else:
+                polyethylene.append(0)
+        elif ROI_val > -50 and ROI_val < 50: #water
+            water.append(ROI_val)
+            if ROI_val > -7 and ROI_val < 7:
+                water.append(1)
+            else:
+                water.append(0)
+        else: #error, check ROI positioning/scan protocol
+            print("ROI Tool failed to detect material")
+            print(ROI_val)
+            unknown.append(ROI_val)
+
+        contours, hierarchy = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+        cv.drawContours(module_1_Dislplay, contours, -1, 255, 3)
+    cv.circle(module_1_Dislplay,(cx_phantom,cy_phantom),3,255,-1)
+    plt.imshow(module_1_Dislplay, cmap='gray')
+    plt.show()
+
+    contour_list = []
+    insert_ctrs = []
+    contour_list.append(add_ROI(module_2,0,58,pixel_size,100))
+    insert_ctrs.append(len(contour_list) - 1)
+    contour_list.append(add_ROI(module_2,-22, 58,pixel_size,100))
+    insert_ctrs.append(len(contour_list) - 1)
+
+    module_2_index = int((module_3_pos - 40)/patient[0].SliceThickness)
+    scan_type = 'adult'
+    max_CNR = 0
+    j = 1
+    plt.figure()
+    for test_slice in np.arange(module_2_index-5,module_2_index+7,1):
+        module_2 = window_image(img_stack[test_slice],100,100)
+        ROI_val = []
+        module_2_Dislplay = module_2.copy()
+        for i in insert_ctrs:
+            mask = np.zeros(module_2.shape,np.uint8)
+            cv.drawContours(mask,contour_list,i,255,-1)
+            mean, std_dev = cv.meanStdDev(module_2,mask=mask)
+            ROI_val.append([mean.item(),std_dev.item()])
+            contours, hierarchy = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+            cv.drawContours(module_2_Dislplay, contours, -1, 255, 3)
+        plt.subplot(2,6, j)
+        plt.imshow(module_2_Dislplay, cmap='gray')
+        plt.title('Slice: {}'.format(test_slice))
+        plt.axis('off')
+        j=j+1
+        CNR = abs(ROI_val[0][0]-ROI_val[1][0])/ROI_val[1][1]
+        if CNR > max_CNR:
+            max_CNR = CNR
+            module_2_index = test_slice
+            module_2_CNR_disp = module_2_Dislplay.copy()
+    plt.show()
+
+    if max_CNR > 1 and scan_type == 'adult':
+        test_pass = 'PASS'
+    elif max_CNR > 0.4 and scan_type == "ped_abd":
+        test_pass = 'PASS'
+    elif max_CNR > 0.7 and scan_type == 'ped_head':
+        test_pass = 'PASS'
+    else:
+        test_pass = 'FAIL'
+
+    plt.imshow(module_2_CNR_disp, cmap='gray')
+    plt.title('Slice: {}  CNR:{}  {}'.format(module_2_index,round(max_CNR,4),test_pass))
+    plt.axis('off')
+    plt.show()
+
+    contour_list = []
+    insert_ctrs = []
+    contour_list.append(add_ROI(module_3,0,0,pixel_size,400))
+    insert_ctrs.append(len(contour_list) - 1)
+    contour_list.append(add_ROI(module_3,0,68,pixel_size,400))
+    insert_ctrs.append(len(contour_list) - 1)
+    contour_list.append(add_ROI(module_3,0, -68,pixel_size,400))
+    insert_ctrs.append(len(contour_list) - 1)
+    contour_list.append(add_ROI(module_3,68,0,pixel_size,400))
+    insert_ctrs.append(len(contour_list) - 1)
+    contour_list.append(add_ROI(module_3,-68,0,pixel_size,400))
+    insert_ctrs.append(len(contour_list) - 1)
+
+    ROI_val = []
+    module_3_Dislplay = module_3.copy()
+    module_3_Dislplay = window_image(module_3_Dislplay,0,100)
+    for i in insert_ctrs:
+        mask = np.zeros(module_3.shape, np.uint8)
+        cv.drawContours(mask, contour_list, i, 255, -1)
+        mean, std_dev = cv.meanStdDev(module_3, mask=mask)
+        ROI_val.append([mean.item(), std_dev.item()])
+        contours, hierarchy = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+        cv.drawContours(module_3_Dislplay, contours, -1, 255, 3)
+    center = ROI_val[0]
+    diff = []
+    test_uniformity = []
+    for pos in np.arange(1,len(ROI_val)):
+        diff.append(ROI_val[pos][0] - ROI_val[0][0])
+        if diff[len(diff)-1] > 7 or diff[len(diff)-1] < -7:
+            test_uniformity.append('FAIL')
+        elif diff[len(diff)-1] > 5 or diff[len(diff)-1] < -5:
+            test_uniformity.append('MINOR DEFICIENCY')
+        else:
+            test_uniformity.append('PASS')
+
+    plt.imshow(module_3_Dislplay, cmap='gray')
+    plt.title('12: {}  3: {}  6: {}  9: {}'
+              '\n Center:{}'
+              '\nDifference from Center {} {} {} {}'
+              '\nUniformity within +/- 7 {} {} {} {}'.format(round(ROI_val[1][0],3),round(ROI_val[3][0],3),round(ROI_val[2][0],3),
+                                                  round(ROI_val[4][0],3),round(ROI_val[0][0],3),round(diff[0],2),round(diff[2],2),round(diff[1],2),round(diff[3],2),
+                                                                     test_uniformity[0], test_uniformity[2],test_uniformity[1],test_uniformity[3]))
+    plt.axis('off')
+    plt.show()
+
+    ###
+
     # rotation_matrix = cv.getRotationMatrix2D((width/2, height/2), 45, 1)
     rotation = 45
     rotation_matrix = cv.getRotationMatrix2D((int(cx_phantom), int(cy_phantom)), rotation, 1)

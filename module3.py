@@ -53,22 +53,22 @@ def test_uniformity(module_3, cx, cy, pixel_size):
     insert_ctrs = []
     contour_list.append(add_ROI(module_3, cx, 0, cy, 0, pixel_size, 400))
     insert_ctrs.append(len(contour_list) - 1)
-    contour_list.append(add_ROI(module_3, 0, 68, pixel_size, 400))
+    contour_list.append(add_ROI(module_3, cx, 0, cy, 68, pixel_size, 400))
     insert_ctrs.append(len(contour_list) - 1)
-    contour_list.append(add_ROI(module_3, 0, -68, pixel_size, 400))
+    contour_list.append(add_ROI(module_3, cx, 0, cy, -68, pixel_size, 400))
     insert_ctrs.append(len(contour_list) - 1)
-    contour_list.append(add_ROI(module_3, 68, 0, pixel_size, 400))
+    contour_list.append(add_ROI(module_3, cx, 68, cy, 0, pixel_size, 400))
     insert_ctrs.append(len(contour_list) - 1)
-    contour_list.append(add_ROI(module_3, -68, 0, pixel_size, 400))
+    contour_list.append(add_ROI(module_3, cx, -68, cy, 0, pixel_size, 400))
     insert_ctrs.append(len(contour_list) - 1)
 
     ROI_val = []
-    module_3_Dislplay = mod_3.copy()
+    module_3_Dislplay = module_3.copy()
     module_3_Dislplay = window_image(module_3_Dislplay, 0, 100)
     for i in insert_ctrs:
-        mask = np.zeros(mod_3.shape, np.uint8)
+        mask = np.zeros(module_3.shape, np.uint8)
         cv.drawContours(mask, contour_list, i, 255, -1)
-        mean, std_dev = cv.meanStdDev(mod_3, mask=mask)
+        mean, std_dev = cv.meanStdDev(module_3, mask=mask)
         ROI_val.append([mean.item(), std_dev.item()])
         contours, hierarchy = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
         cv.drawContours(module_3_Dislplay, contours, -1, 255, 3)
@@ -95,4 +95,5 @@ def test_uniformity(module_3, cx, cy, pixel_size):
                                                              round(diff[3], 2),
                                                              test_uniformity[0], test_uniformity[2], test_uniformity[1],
                                                              test_uniformity[3]))
+    plt.show()
     return

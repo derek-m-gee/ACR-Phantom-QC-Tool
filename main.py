@@ -105,7 +105,8 @@ def window_image(img, level,window):
     return imageWL
 def add_ROI(slice,cx,xpos,cy, ypos,pixel_size,area=200):
     mask = np.zeros(slice.shape, np.uint8)
-    center = (int(cx - ypos / pixel_size[0]), int(cy + xpos / pixel_size[1]))
+    center = (int(cy - ypos / pixel_size[0]), int(cx + xpos / pixel_size[1]))
+    #260 255
     radius = int(math.sqrt(area/math.pi) / pixel_size[0])
     cv.circle(mask, center, radius, 255, 3)
     indices = np.array(np.transpose(np.nonzero(mask)))
@@ -118,8 +119,8 @@ def get_LP(img,coord,width=1):
     return line_profile
 if __name__ == '__main__':
     id=0
-    data_path = r"C:\Users\derek\Documents\RAMD5394IndependentStudy\ACRQCtool\ADULT_ABD_10\\"
-    # data_path = r"C:\Users\derek\Documents\RAMD5394IndependentStudy\ACRQCtool\ADULT_ABD_12\\"
+    # data_path = r"C:\Users\derek\Documents\RAMD5394IndependentStudy\ACRQCtool\ADULT_ABD_10\\"
+    data_path = r"C:\Users\derek\Documents\RAMD5394IndependentStudy\ACRQCtool\ADULT_ABD_12\\"
     # data_path = r"C:\Users\derek\Documents\RAMD5394IndependentStudy\ACRQCtool\80_kVp_3_mm_4\\"
     # data_path = r"C:\Users\derek\Documents\RAMD5394IndependentStudy\ACRQCtool\PED_BODY_6\\"
 
