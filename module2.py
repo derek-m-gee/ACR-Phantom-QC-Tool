@@ -1,7 +1,7 @@
 import numpy as np
 import cv2 as cv
 import matplotlib.pyplot as plt
-from main import window_image, add_ROI
+from imageTools import window_image, add_ROI
 def get_CNR(img_stack, module_2,module_2_index,cx,cy,pixel_size, scan_type = 'adult'):
     contour_list = []
     insert_ctrs = []

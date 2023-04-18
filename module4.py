@@ -1,7 +1,7 @@
 import numpy as np
 import cv2 as cv
 import matplotlib.pyplot as plt
-from main import window_image, add_ROI
+from imageTools import window_image
 
 def test_res(module_4,cx,cy,pixel_size):
     rotation = 45

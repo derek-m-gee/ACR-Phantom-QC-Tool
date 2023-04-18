@@ -7,116 +7,9 @@ import os
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-import pydicom
 import cv2 as cv
+from imageTools import *
 
-#Loads in all DICOM
-def load_scan(path):
-    slices = [pydicom.read_file(path + '/' + s) for s in os.listdir(path)]
-    slices.sort(key=lambda x: int(x.InstanceNumber))
-    try:
-        slice_thickness = np.abs(slices[0].ImagePositionPatient[2] -
-                                 slices[1].ImagePositionPatient[2])
-    except:
-        slice_thickness = np.abs(slices[0].SliceLocation - slices[1].SliceLocation)
-    for s in slices:
-        s.SliceThickness = slice_thickness
-    return slices
-
-#Pixel array stores data as intensity, this function linearly converts
-# to Hounsfield Units using slope and intercept from DICOM Header
-def get_pixels_hu(ds):
-    image_data = ds.pixel_array
-    image_data = image_data.astype(np.int16)
-    # Set outside-of-scan pixels to 1
-    # Intercept is usually -1024, so air is approximately 0
-    image_data[image_data == -2000] = 0
-
-    # Convert to Hounsfield Units (HU)
-    intercept = ds.RescaleIntercept
-    slope = ds.RescaleSlope
-
-    if slope != 1:
-        image_data = slope * image_data.astype(np.float64)
-        image_data = image_data.astype(np.int16)
-    image_data += np.int16(intercept)
-    return np.array(image_data, dtype=np.int16)
-
-def get_pixels_hu_stack(scans):
-    image_data = np.stack([s.pixel_array for s in scans])
-    image_data = image_data.astype(np.int16)
-    # Set outside-of-scan pixels to 1
-    # Intercept is usually -1024, so air is approximately 0
-    image_data[image_data == -2000] = 0
-
-    # Convert to Hounsfield Units (HU)
-    intercept = scans[0].RescaleIntercept
-    slope = scans[0].RescaleSlope
-
-    if slope != 1:
-        image_data = slope * image_data.astype(np.float64)
-        image_data = image_data.astype(np.int16)
-    image_data += np.int16(intercept)
-    return np.array(image_data, dtype=np.int16)
-
-#Displays histogram data
-def histogram_from_stack(img, id=0):
-    plt.hist(img.flatten(),bins=50,color='c')
-    plt.xlabel("Hounsfield Units (HU)")
-    plt.ylabel("Frequency")
-    plt.show()
-    return
-
-def display_stack(stack,start_with=0,show_every=3):
-    rows = math.isqrt(len(stack))
-    cols = math.isqrt(len(stack))
-    fig,ax = plt.subplots(int(rows/show_every),cols,figsize=[12,12])
-    for i in range(rows*cols):
-        try:
-            ind = start_with + i*show_every
-            ax[int(i/rows),int(i % rows)].set_title('slice {}'.format(ind))
-            ax[int(i/rows),int(i % rows)].imshow(stack[ind],cmap='gray')
-            ax[int(i / rows), int(i % rows)].axis('off')
-        except:
-            pass
-    plt.show()
-
-#Thresholds image/stack for high intensity objects, level sets %limit for threshold
-def img_threshold(img,level = 0.8):
-    #Arbitrary Global Thresholding
-    ret, th = cv.threshold(img,img.max()*(1-level),img.max(),cv.THRESH_BINARY)
-
-    #Adaptive Thresholding
-    #ret, th = cv.adaptiveThreshold(img,1500,cv.ADAPTIVE_THRESH_MEAN_C,
-    #        cv.THRESH_BINARY,11,2)
-    #Otsu Binarization
-    #ret, th = cv.threshold(img, 0, 1500, cv.THRESH_BINARY+cv.THRESH_OTSU)
-
-    #plt.imshow(th, cmap='gray')
-    #plt.show()
-    return th
-
-def window_image(img, level,window):
-    img_min = level - window // 2
-    img_max = level + window // 2
-    imageWL = img.copy()
-    imageWL[imageWL < img_min] = img_min
-    imageWL[imageWL > img_max] = img_max
-    return imageWL
-def add_ROI(slice,cx,xpos,cy, ypos,pixel_size,area=200):
-    mask = np.zeros(slice.shape, np.uint8)
-    center = (int(cy - ypos / pixel_size[0]), int(cx + xpos / pixel_size[1]))
-    #260 255
-    radius = int(math.sqrt(area/math.pi) / pixel_size[0])
-    cv.circle(mask, center, radius, 255, 3)
-    indices = np.array(np.transpose(np.nonzero(mask)))
-    return indices
-#Samples the image across line specified by start and end points
-def get_LP(img,coord,width=1):
-    line_mask=np.zeros_like(img)
-    cv.line(line_mask,coord[0],coord[1],255,thickness=width)
-    line_profile = cv.bitwise_and(img,line_mask)
-    return line_profile
 if __name__ == '__main__':
     id=0
     # data_path = r"C:\Users\derek\Documents\RAMD5394IndependentStudy\ACRQCtool\ADULT_ABD_10\\"
@@ -138,11 +31,11 @@ if __name__ == '__main__':
 
     #######################################################################################
     # Module 1 Indexing
-    #######################################################################################
-
-    #ACR Phantom Modules 40 mm in depth and 200 mm diamter
+    # Uses Module 3 BBs as landmark to determine Module 1 slice position.
+    # ACR Phantom Modules 40 mm in depth and 200 mm diameter.
     # subtracting the length of 2 modules from the position of the
     # known module 3 slice position gives the position of module 1.
+    #######################################################################################
     from module3 import find_slice
     module_3_index = find_slice(img_stack)
     module_3 = img_stack[module_3_index]
@@ -159,13 +52,11 @@ if __name__ == '__main__':
     #######################################################################################
     # Phantom Angle Correction
     #######################################################################################
-    from module3 import find_rotation
-    module_3BBs = img_threshold(module_3.copy(),.6)
-    mod_3BB_8bit = cv.convertScaleAbs(module_3BBs,alpha=(255/32768))
-    BB_contours, hierarchy = cv.findContours(mod_3BB_8bit, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+    from module3 import find_rotation, get_BBs
+    BB_contours = get_BBs(module_3)
     offset = find_rotation(BB_contours,45)
 
-    height,width = mod_3BB_8bit.shape[:2]
+    height,width = module_3.shape[:2]
     rotation_matrix = cv.getRotationMatrix2D((width/2, height/2), offset, 1)
     for i in np.arange(len(img_stack)):
         img_stack[i] = cv.warpAffine(img_stack[i], rotation_matrix, (width, height))

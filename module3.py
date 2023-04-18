@@ -2,12 +2,12 @@
 import numpy as np
 import cv2 as cv
 import matplotlib.pyplot as plt
-from main import img_threshold, window_image, add_ROI
+from imageTools import img_threshold, window_image, add_ROI
 
 
 #Finds slices with max intensity >150 HU but no more than 800
 # Returns slice with fewest number of non_zero
-def find_slice(stack, min_val=300, max_val =800):
+def find_slice(stack, min_val=300, max_val=800):
     possible_slice = []
     n_nonzero = []
     slice_max = []
@@ -20,17 +20,23 @@ def find_slice(stack, min_val=300, max_val =800):
                 slice_max.append(mask.max())
     probable_slice = possible_slice[n_nonzero.index(min(n_nonzero))]
     max_HU = slice_max[n_nonzero.index(min(n_nonzero))]
-    if (probable_slice-1 in possible_slice):
-        check_max = stack[probable_slice-1].max()
-        if ((check_max-max_HU)/max_HU < .1):
+    if (probable_slice - 1 in possible_slice):
+        check_max = stack[probable_slice - 1].max()
+        if ((check_max - max_HU) / max_HU < .1):
             probable_slice -= 1
-    if (probable_slice+1 in possible_slice):
-        check_max = stack[probable_slice+1].max()
-        if ((check_max-max_HU)/max_HU < .1):
+    if (probable_slice + 1 in possible_slice):
+        check_max = stack[probable_slice + 1].max()
+        if ((check_max - max_HU) / max_HU < .1):
             probable_slice += 1
     return probable_slice
 
-def find_rotation(BB_contours,theta ='45'):
+def get_BBs(mod_3):
+    module_3bbs = img_threshold(mod_3.copy(), .6)
+    mod_3bb_8bit = cv.convertScaleAbs(module_3bbs, alpha=(255 / 32768))
+    bb_contours, hierarchy = cv.findContours(mod_3bb_8bit, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+    return bb_contours
+
+def find_rotation(BB_contours, theta='45'):
     BBx = []
     BBy = []
     for i in np.arange(len(BB_contours)):
@@ -48,6 +54,7 @@ def find_rotation(BB_contours,theta ='45'):
     rotation = theta + ang
     return rotation
 
+
 def test_uniformity(module_3, cx, cy, pixel_size):
     contour_list = []
     insert_ctrs = []
@@ -63,15 +70,15 @@ def test_uniformity(module_3, cx, cy, pixel_size):
     insert_ctrs.append(len(contour_list) - 1)
 
     ROI_val = []
-    module_3_Dislplay = module_3.copy()
-    module_3_Dislplay = window_image(module_3_Dislplay, 0, 100)
+    module_3_Display = module_3.copy()
+    module_3_Display = window_image(module_3_Display, 0, 100)
     for i in insert_ctrs:
         mask = np.zeros(module_3.shape, np.uint8)
         cv.drawContours(mask, contour_list, i, 255, -1)
         mean, std_dev = cv.meanStdDev(module_3, mask=mask)
         ROI_val.append([mean.item(), std_dev.item()])
         contours, hierarchy = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-        cv.drawContours(module_3_Dislplay, contours, -1, 255, 3)
+        cv.drawContours(module_3_Display, contours, -1, 255, 3)
     center = ROI_val[0]
     diff = []
     test_uniformity = []
@@ -84,7 +91,7 @@ def test_uniformity(module_3, cx, cy, pixel_size):
         else:
             test_uniformity.append('PASS')
 
-    plt.imshow(module_3_Dislplay, cmap='gray')
+    plt.imshow(module_3_Display, cmap='gray')
     plt.title('12: {}  3: {}  6: {}  9: {}'
               '\n Center:{}'
               '\nDifference from Center {} {} {} {}'

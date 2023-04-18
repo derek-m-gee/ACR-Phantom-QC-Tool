@@ -1,9 +1,8 @@
 # Module 1 Functions and Methods
 import numpy as np
-import math
 import cv2 as cv
 import matplotlib.pyplot as plt
-from main import window_image, add_ROI
+from imageTools import window_image, add_ROI
 
 #findContours automatically finds contours but finds all contours including objects inlaid or connected
 # the RETR_EXTERNAL contouring mode only finds the outer or parent objects
@@ -101,7 +100,7 @@ def sample_inserts(module_1,cx,dx,cy,dy,pixel_size):
 
         contours, hierarchy = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
         cv.drawContours(module_1_Dislplay, contours, -1, 255, 3)
-    cv.circle(module_1_Dislplay, (cx, cy), 3, 255, -1)
+    cv.circle(module_1_Dislplay, (cx, cy), 3, (255,0,255), -1)
     plt.imshow(module_1_Dislplay, cmap='gray')
     plt.show()
     return bone, air, acrylic, polyethylene, water, unknown
