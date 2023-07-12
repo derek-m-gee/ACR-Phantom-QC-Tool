@@ -34,14 +34,20 @@ def test_res(module_4,cx,cy,pixel_size):
     non_alias_patterns = np.where(np.array(deviation) > limit)[0]
     arr = [deviation[i] for i in non_alias_patterns]
     res_limit_pattern = np.where(arr == np.min(arr))[0]
+    LP_pattern = [4, 5, 6, 7, 8, 9, 10, 12]
     res_limit_dev = deviation[int(res_limit_pattern)]
 
-    plt.imshow(module_4_Dislplay, cmap='gray')
-    plt.show()
-    plt.plot(line_profile[2])
-    plt.xlabel('Pixel distance')
-    plt.ylabel('Intensity')
-    plt.title('Mean Intensity Across Sampled ROI')
-    plt.show()
+    # rotation_matrix = cv.getRotationMatrix2D((int(cx), int(cy)), -rotation, 1)
+    # module_4_Dislplay = cv.warpAffine(module_4_Dislplay, rotation_matrix, (width, height))
 
-    return res_limit_dev
+    # plt.imshow(module_4_Dislplay, cmap='gray')
+    # plt.show()
+
+
+    # plt.plot(line_profile[int(res_limit_pattern)])
+    # plt.xlabel('Pixel distance')
+    # plt.ylabel('Intensity')
+    # plt.title('Mean Intensity Across Sampled ROI')
+    # plt.show()
+
+    return LP_pattern[int(res_limit_pattern)],res_limit_dev, module_4_Dislplay

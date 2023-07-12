@@ -6,13 +6,14 @@ from imageTools import img_threshold, window_image, add_ROI
 
 
 #Finds slices with max intensity >150 HU but no more than 800
-# Returns slice with fewest number of non_zero
-def find_slice(stack, min_val=300, max_val=800):
+# Returns slice with the fewest number of non_zero
+
+def find_slice(stack, min_val=300, max_val=800,thresh_level=.6):
     possible_slice = []
     n_nonzero = []
     slice_max = []
     for s in np.arange(len(stack)):
-        mask = img_threshold(stack[s])
+        mask = img_threshold(stack[s],thresh_level)
         if np.count_nonzero(mask > min_val) > 0:
             if mask.max() < max_val:
                 possible_slice.append(s)
@@ -30,10 +31,13 @@ def find_slice(stack, min_val=300, max_val=800):
             probable_slice += 1
     return probable_slice
 
-def get_BBs(mod_3):
-    module_3bbs = img_threshold(mod_3.copy(), .6)
+def get_BBs(mod_3,level = .6):
+    module_3bbs = img_threshold(mod_3.copy(), level)
     mod_3bb_8bit = cv.convertScaleAbs(module_3bbs, alpha=(255 / 32768))
     bb_contours, hierarchy = cv.findContours(mod_3bb_8bit, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+    #
+    # drawing_image = np.zeros_like(mod_3)
+    # cv.drawContours(drawing_image, bb_contours, -1, 255, 3)
     return bb_contours
 
 def find_rotation(BB_contours, theta='45'):
@@ -91,16 +95,16 @@ def test_uniformity(module_3, cx, cy, pixel_size):
         else:
             test_uniformity.append('PASS')
 
-    plt.imshow(module_3_Display, cmap='gray')
-    plt.title('12: {}  3: {}  6: {}  9: {}'
-              '\n Center:{}'
-              '\nDifference from Center {} {} {} {}'
-              '\nUniformity within +/- 7 {} {} {} {}'.format(round(ROI_val[1][0], 3), round(ROI_val[3][0], 3),
-                                                             round(ROI_val[2][0], 3),
-                                                             round(ROI_val[4][0], 3), round(ROI_val[0][0], 3),
-                                                             round(diff[0], 2), round(diff[2], 2), round(diff[1], 2),
-                                                             round(diff[3], 2),
-                                                             test_uniformity[0], test_uniformity[2], test_uniformity[1],
-                                                             test_uniformity[3]))
-    plt.show()
-    return
+    # plt.imshow(module_3_Display, cmap='gray')
+    # plt.title('12: {}  3: {}  6: {}  9: {}'
+    #           '\n Center:{}'
+    #           '\nDifference from Center {} {} {} {}'
+    #           '\nUniformity within +/- 7 {} {} {} {}'.format(round(ROI_val[1][0], 3), round(ROI_val[3][0], 3),
+    #                                                          round(ROI_val[2][0], 3),
+    #                                                          round(ROI_val[4][0], 3), round(ROI_val[0][0], 3),
+    #                                                          round(diff[0], 2), round(diff[2], 2), round(diff[1], 2),
+    #                                                          round(diff[3], 2),
+    #                                                          test_uniformity[0], test_uniformity[2], test_uniformity[1],
+    #                                                          test_uniformity[3]))
+    # plt.show()
+    return test_uniformity, module_3_Display

@@ -101,6 +101,6 @@ def sample_inserts(module_1,cx,dx,cy,dy,pixel_size):
         contours, hierarchy = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
         cv.drawContours(module_1_Dislplay, contours, -1, 255, 3)
     cv.circle(module_1_Dislplay, (cx, cy), 3, (255,0,255), -1)
-    plt.imshow(module_1_Dislplay, cmap='gray')
-    plt.show()
-    return bone, air, acrylic, polyethylene, water, unknown
+    # plt.imshow(module_1_Dislplay, cmap='gray')
+    # plt.show()
+    return bone, air, acrylic, polyethylene, water, unknown,module_1_Dislplay

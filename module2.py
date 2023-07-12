@@ -46,8 +46,8 @@ def get_CNR(img_stack, module_2,module_2_index,cx,cy,pixel_size, scan_type = 'ad
     else:
         test_pass = 'FAIL'
 
-    plt.imshow(module_2_CNR_disp, cmap='gray')
-    plt.title('Slice: {}  CNR:{}  {}'.format(module_2_index,round(max_CNR,4),test_pass))
-    plt.axis('off')
-    plt.show()
-    return max_CNR
+    # plt.imshow(module_2_CNR_disp, cmap='gray')
+    # plt.title('Slice: {}  CNR:{} Scan Type:{} {}'.format(module_2_index,round(max_CNR,4),scan_type,test_pass))
+    # plt.axis('off')
+    # plt.show()
+    return max_CNR, test_pass, module_2_CNR_disp
