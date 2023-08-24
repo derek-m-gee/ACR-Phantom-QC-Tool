@@ -66,33 +66,33 @@ def sample_inserts(module_1,cx,dx,cy,dy,pixel_size):
         if ROI_val >= 750:  # bone
             bone.append(ROI_val)
             if ROI_val > 850 and ROI_val < 970:
-                bone.append(1)
+                bone.append('PASS')
             else:
-                bone.append(0)
+                bone.append('FAIL')
         elif ROI_val <= -750:  # air
             air.append(ROI_val)
             if ROI_val > -1005 and ROI_val < -970:
-                air.append(1)
+                air.append('PASS')
             else:
-                air.append(0)
+                air.append('FAIL')
         elif ROI_val > 50 and ROI_val < 300:  # acrylic
             acrylic.append(ROI_val)
             if ROI_val > 110 and ROI_val < 135:
-                acrylic.append(1)
+                acrylic.append('PASS')
             else:
-                acrylic.append(0)
+                acrylic.append('FAIL')
         elif ROI_val > -300 and ROI_val < -50:  # polyethylene
             polyethylene.append(ROI_val)
             if ROI_val > -107 and ROI_val < -84:
-                polyethylene.append(1)
+                polyethylene.append('PASS')
             else:
-                polyethylene.append(0)
+                polyethylene.append('FAIL')
         elif ROI_val > -50 and ROI_val < 50:  # water
             water.append(ROI_val)
             if ROI_val > -7 and ROI_val < 7:
-                water.append(1)
+                water.append('PASS')
             else:
-                water.append(0)
+                water.append('FAIL')
         else:  # error, check ROI positioning/scan protocol
             print("ROI Tool failed to detect material")
             print(ROI_val)
@@ -101,6 +101,10 @@ def sample_inserts(module_1,cx,dx,cy,dy,pixel_size):
         contours, hierarchy = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
         cv.drawContours(module_1_Dislplay, contours, -1, 255, 3)
     cv.circle(module_1_Dislplay, (cx, cy), 3, (255,0,255), -1)
-    # plt.imshow(module_1_Dislplay, cmap='gray')
+    plt.imshow(module_1_Dislplay, cmap='gray')
+    plt.axis('off')
+    plt.tight_layout()
+    plt.savefig('module1.png')
+
     # plt.show()
-    return bone, air, acrylic, polyethylene, water, unknown,module_1_Dislplay
+    return water, air, bone,  polyethylene, acrylic, unknown,

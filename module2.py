@@ -33,6 +33,7 @@ def get_CNR(img_stack, module_2,module_2_index,cx,cy,pixel_size, scan_type = 'ad
         CNR = abs(ROI_val[0][0]-ROI_val[1][0])/ROI_val[1][1]
         if CNR > max_CNR:
             max_CNR = CNR
+            max_CNR_ROIs = [ROI_val[0][0],ROI_val[1][0],ROI_val[1][1]]
             module_2_index = test_slice
             module_2_CNR_disp = module_2_Dislplay.copy()
     # plt.show()
@@ -46,8 +47,12 @@ def get_CNR(img_stack, module_2,module_2_index,cx,cy,pixel_size, scan_type = 'ad
     else:
         test_pass = 'FAIL'
 
-    # plt.imshow(module_2_CNR_disp, cmap='gray')
-    # plt.title('Slice: {}  CNR:{} Scan Type:{} {}'.format(module_2_index,round(max_CNR,4),scan_type,test_pass))
-    # plt.axis('off')
+    cnr_result = 'Slice: {}  CNR:{} Scan Type:{} {}'.format(module_2_index,round(max_CNR,4),scan_type,test_pass)
+
+    plt.imshow(module_2_CNR_disp, cmap='gray')
+    plt.axis('off')
+    plt.tight_layout()
+    plt.savefig('module2.png')
+
     # plt.show()
-    return max_CNR, test_pass, module_2_CNR_disp
+    return [max_CNR], [test_pass], max_CNR_ROIs, [cnr_result]

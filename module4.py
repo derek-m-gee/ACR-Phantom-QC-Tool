@@ -34,13 +34,22 @@ def test_res(module_4,cx,cy,pixel_size):
     non_alias_patterns = np.where(np.array(deviation) > limit)[0]
     arr = [deviation[i] for i in non_alias_patterns]
     res_limit_pattern = np.where(arr == np.min(arr))[0]
+    x, y, w, h = int(cx + dx[res_limit_pattern[0]]),\
+        int(cy + dy[res_limit_pattern[0]] - ROI_length / pixel_size[0] * .5),\
+        int(ROI_length / pixel_size[0]),\
+        int(ROI_length / pixel_size[1])
+    cv.rectangle(module_4_Dislplay, (x, y), (x + w, y + h), 255, 5)
     LP_pattern = [4, 5, 6, 7, 8, 9, 10, 12]
     res_limit_dev = deviation[int(res_limit_pattern)]
 
-    # rotation_matrix = cv.getRotationMatrix2D((int(cx), int(cy)), -rotation, 1)
-    # module_4_Dislplay = cv.warpAffine(module_4_Dislplay, rotation_matrix, (width, height))
+    rotation_matrix = cv.getRotationMatrix2D((int(cx), int(cy)), -rotation, 1)
+    module_4_Dislplay = cv.warpAffine(module_4_Dislplay, rotation_matrix, (width, height))
 
-    # plt.imshow(module_4_Dislplay, cmap='gray')
+
+
+    plt.imshow(module_4_Dislplay, cmap='gray')
+    plt.tight_layout()
+    plt.savefig("module4.png")
     # plt.show()
 
 

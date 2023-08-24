@@ -5,7 +5,9 @@
 # https://www.raddq.com/dicom-processing-segmentation-visualization-in-python/
 # https://www.researchgate.net/publication/9063443_Accuracy_of_a_simple_method_for_deriving_the_presampled_modulation_transfer_function_of_a_digital_radiographic_system_from_an_edge_image
 # Create a data/code folder and output
+import numpy as np
 
+# from publishReport import create_report
 from acrQC import ImageQuality
 # Builds QC scan object and scores image quality with respect to ACR Requirements
 def main(data_path):
@@ -23,6 +25,7 @@ def main(data_path):
     acr_test.testRes()
 
     results = [acr_test.inserts,acr_test.CNR,acr_test.uniformity,acr_test.max_res]
+    # create_report(test_results, 'template.xlsx', 'CT_IQ', 'reportMapping.txt', ['Adult', 'Abdomen'])
 
     return results
 

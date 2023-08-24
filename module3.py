@@ -95,16 +95,18 @@ def test_uniformity(module_3, cx, cy, pixel_size):
         else:
             test_uniformity.append('PASS')
 
-    # plt.imshow(module_3_Display, cmap='gray')
-    # plt.title('12: {}  3: {}  6: {}  9: {}'
-    #           '\n Center:{}'
-    #           '\nDifference from Center {} {} {} {}'
-    #           '\nUniformity within +/- 7 {} {} {} {}'.format(round(ROI_val[1][0], 3), round(ROI_val[3][0], 3),
-    #                                                          round(ROI_val[2][0], 3),
-    #                                                          round(ROI_val[4][0], 3), round(ROI_val[0][0], 3),
-    #                                                          round(diff[0], 2), round(diff[2], 2), round(diff[1], 2),
-    #                                                          round(diff[3], 2),
-    #                                                          test_uniformity[0], test_uniformity[2], test_uniformity[1],
-    #                                                          test_uniformity[3]))
+    uniformity_result = '12: {}  3: {}  6: {}  9: {} \nCenter:{} \nDifference from Center 12: {} 3: {} 6: {} 9: {} ' \
+                        '\nUniformity within +/- 7 12: {} 3: {} 6: {} 9: {}'.format(round(ROI_val[1][0], 3), round(ROI_val[3][0], 3),
+                                                             round(ROI_val[2][0], 3),
+                                                             round(ROI_val[4][0], 3), round(ROI_val[0][0], 3),
+                                                             round(diff[0], 2), round(diff[2], 2), round(diff[1], 2),
+                                                             round(diff[3], 2),
+                                                             test_uniformity[0], test_uniformity[2], test_uniformity[1],
+                                                             test_uniformity[3])
+
+    report_format = [round(ROI_val[0][0], 3),round(ROI_val[3][0], 3),round(ROI_val[2][0], 3),round(ROI_val[4][0], 3),round(ROI_val[1][0], 3)]
+    plt.imshow(module_3_Display, cmap='gray')
+    plt.tight_layout()
+    plt.savefig('module3.png')
     # plt.show()
-    return test_uniformity, module_3_Display
+    return test_uniformity, report_format, [uniformity_result]
